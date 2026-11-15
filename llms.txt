@@ -1,0 +1,37 @@
+# fm8-career-server
+
+> Pseudo localhost server (mock LSP) for Forza Motorsport 2023, built from full
+> reverse engineering of the XLS protocol. Documents the protocol exhaustively;
+> the mock works up to the cryptographic layer (a career on a fake server is
+> impossible without Turn 10's private key).
+
+## Docs
+
+- [README](README.md): overview, structure, disclaimer, sanitized-repo policy
+- [docs/PROTOCOL.md](docs/PROTOCOL.md): XLS transport, 13B response frame, method registry, kind semantics (wire format)
+- [docs/SCHEMAS.md](docs/SCHEMAS.md): UserLogonResponse (31 fields), UserData (17), UserLogonData, DownloadPlayerProfile, nested types
+- [docs/CRYPTO.md](docs/CRYPTO.md): message cipher, RSA key roles, request shape, response routes A/B, signature gate, error fingerprints
+- [docs/VERDICT.md](docs/VERDICT.md): what works / what doesn't and why; passive-proxy and CMS limits
+- [docs/EVIDENCE-INDEX.md](docs/EVIDENCE-INDEX.md): code addresses, hashes, dump offsets, samples
+- [server/README.md](server/README.md): mock operation, presets, live control (:5080), caveats
+
+## Analysis (full specs)
+
+- [analysis/ENVELOPE-SPEC.md](analysis/ENVELOPE-SPEC.md): complete protocol + crypto spec (1459 lines, incl. FINAL VERDICT)
+- [analysis/XLS-FRAMING-NOTES-20261114.md](analysis/XLS-FRAMING-NOTES-20261114.md): investigation notes (schemas, walker, captures, crypto hunt)
+- [analysis/CP-BALANCE-AWARDS-REPORT-20261114.md](analysis/CP-BALANCE-AWARDS-REPORT-20261114.md): CP balance/awards verdict (server-authoritative)
+
+## Code
+
+- [server/mock_server.py](server/mock_server.py): TLS mock :443 + live control :5080
+- [server/xls_crypto.py](server/xls_crypto.py): RSA2 parse, OAEP, PKCS#1 v1.5, AES-256-CBC
+- [server/xls_encoder.py](server/xls_encoder.py): XLS schemas + encoder/decoder
+- [server/self_test.py](server/self_test.py): 175 checks incl. encrypted roundtrip
+- [capture/capture_server.py](capture/capture_server.py): MITM capture proxy
+- [tools/dumper.py](tools/dumper.py): memory dumper (dump-text, scan-keys, dump-extents, poll-extents, hunt-key)
+- [AGENTS.md](AGENTS.md): guidance for AI agents working in this repo
+
+## Optional
+
+- [capture/samples/](capture/samples/): encrypted Logon request bodies (896B, no auth headers)
+- `keys/`, `unwrap/`, dumps, runtime logs: git-ignored, never committed
