@@ -1,0 +1,114 @@
+{
+  "_comment": "mock LSP v2.1 — estado editavel da conta + knobs de envelope. Chaves planas mapeiam para UserLogonResponse/UserData por nome de campo (aliases: xuid->qwXuid, gamerTag->wzGamerTag). Campos ausentes caem nos defaults da spec (0/\"\"/[]/1970-01-01T00:00:00.000Z; isProfileValid=true; currentDriverLevel=1; poll=60; timeouts 4000/60000/60000).",
+  "xuid": 2533274958092393,
+  "gamerTag": "TestDriver",
+  "flags": 0,
+
+  "clubId": "00000000000000000000000000000000",
+  "clubTag": "",
+  "clubTopTierCount": 0,
+  "roleInClub": 0,
+  "currentBadgeId": 0,
+  "currentPlayerTitleId": 0,
+  "currentCarCollectionScore": 0,
+  "currentCarCollectionTier": 0,
+  "currentDriverLevel": 1,
+  "currentPrestigeRank": 0,
+  "currentDriverModelId": 0,
+  "customizationSlotsV2": [],
+  "region": 0,
+  "recentlySeen": false,
+
+  "isProfileValid": true,
+  "permissions": [
+    { "methodId": 1, "tier": 0, "isEnabled": 1, "access": 0 }
+  ],
+  "featureAreasBanMask": 0,
+  "userFlags": 0,
+  "upsellOfferId": 0,
+  "upsellText": "",
+  "vipOfferIds": [],
+  "SecurityId": "00000000000000000000000000000000",
+  "notificationNonce": 0,
+  "notificationPollIntervalSeconds": 60,
+  "defaultFriendsPollIntervalSeconds": 60,
+  "maxFriendsPollIntervalSeconds": 60,
+  "notificationCategories": [],
+  "defaultTimeoutMs": 4000,
+  "defaultContentTimeoutMs": 60000,
+  "defaultInGameTimeoutMs": 60000,
+  "makeDiscounts": [],
+  "carDiscounts": [],
+  "makePartsDiscounts": [],
+  "carPartsDiscounts": [],
+  "featuredUserEntries": [],
+  "pushNotificationTags": [],
+  "allCarDiscount": {
+    "TokenDiscountAmount": 0, "CreditDiscountAmount": 0,
+    "StartDate": "1970-01-01T00:00:00.000Z", "EndDate": "1970-01-01T00:00:00.000Z",
+    "OfferId": 0
+  },
+  "allPartsDiscount": {
+    "TokenDiscountAmount": 0, "CreditDiscountAmount": 0,
+    "StartDate": "1970-01-01T00:00:00.000Z", "EndDate": "1970-01-01T00:00:00.000Z",
+    "OfferId": 0
+  },
+  "cmsInformation": { "Header": "", "Override": "", "SlotId": "", "SnapId": "", "Version": 0 },
+  "availabilityInformation": {
+    "IsCurrentlyAvailable": false,
+    "NearestWindowOpenTime": "1970-01-01T00:00:00.000Z",
+    "NearestWindowCloseTime": "1970-01-01T00:00:00.000Z"
+  },
+  "FlightRingId": "",
+  "systemTimeUTC": "auto",
+  "lastZendeskTicketCreateTime": "1970-01-01T00:00:00.000Z",
+  "banData": [],
+
+  "_comment_variants": "Variantes A/B da ENVELOPE-SPEC §7.4 + 8 (mock v3 rota A) e 9 (mock v3 rota B), selecionaveis sem editar codigo: 'active' escolhe o preset; 'overrides' sobrescreve chave por chave (null = herda do preset). presets.permissions aceita 'empty' | 'one' | 'config' (usa a lista 'permissions' acima). O log registra a variante efetiva no campo 'note'.",
+  "variants": {
+    "active": "8",
+    "presets": {
+      "1": { "frameByte0": 0, "frameSize": 13, "xEncryption": null, "permissions": "empty", "bodyPrefix": false },
+      "2": { "frameByte0": 0, "frameSize": 13, "xEncryption": null, "permissions": "one", "bodyPrefix": false },
+      "3": { "frameByte0": 0, "frameSize": 13, "xEncryption": "false", "permissions": "empty", "bodyPrefix": false },
+      "4": { "frameByte0": 1, "frameSize": 13, "xEncryption": null, "permissions": "empty", "bodyPrefix": false },
+      "5": { "frameByte0": 0, "frameSize": 12, "xEncryption": null, "permissions": "empty", "bodyPrefix": false },
+      "6": { "frameByte0": 0, "frameSize": 13, "xEncryption": null, "permissions": "empty", "bodyPrefix": true },
+      "8": { "frameByte0": 0, "frameSize": 13, "xEncryption": null, "permissions": "one", "bodyPrefix": false, "encrypted": true, "route": "A" },
+      "9": { "frameByte0": 0, "frameSize": 13, "xEncryption": null, "permissions": "one", "bodyPrefix": false, "encrypted": true, "route": "B" }
+    },
+    "overrides": {}
+  },
+
+  "_comment_crypto": "mock v3 (ENVELOPE-SPEC R6): resposta = IV(16) || AES-256-CBC(PKCS#7(frame13||corpo)) || RSA-OAEP-SHA1(IV||K^mask||0*16). mask = 32 B de crypto_ctx+0x20 do cliente (desconhecido #1: default zeros). aesKeyHex/ivHex null = aleatorios (a chave rotaciona por Logon). skipPreStep documenta o desconhecido #2: FUN_141c552f0 roda no cliente ANTES do BCryptDecrypt sobre o bloco RSA e NAO e' emulado. encryptEcho cifra tambem as respostas dos outros metodos com a chave de sessao (o DEC do cliente decifra incondicionalmente). A privada do cliente e' derivada do blob 'RSA2' de dump_text.bin (offset de ARQUIVO = VA - 0x140001000).",
+  "crypto": {
+    "mask": "0000000000000000000000000000000000000000000000000000000000000000",
+    "aesKeyHex": null,
+    "ivHex": null,
+    "keyDir": "keys",
+    "dump": "dump_text.bin",
+    "blobOffset": "0x0491f9a0",
+    "skipPreStep": true,
+    "encryptEcho": true,
+    "writePem": true
+  },
+
+  "_comment_frame": "Overrides avulsos do frame (null/vazio = herda da variante ativa). status 0 = ok; status 2 injeta erro 0x80510000|code. NUNCA envie X-Renegotiate.",
+  "frame": {
+    "byte0": null,
+    "size": null,
+    "bodyPrefix": null,
+    "isVip": false,
+    "isUltimateVip": false,
+    "status": 0,
+    "code": 0
+  },
+
+  "_comment_server": "defaults do mock_server.py; --port / --tls / --variant sobrescrevem.",
+  "server": {
+    "port": 443,
+    "cert": "E:\\Projetos\\fm8-lsp-server\\certs\\cert.pem",
+    "key": "E:\\Projetos\\fm8-lsp-server\\certs\\key.pem",
+    "log": "capture_log.jsonl"
+  }
+}

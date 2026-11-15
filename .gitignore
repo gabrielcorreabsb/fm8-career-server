@@ -1,0 +1,28 @@
+# ---- SEGREDOS / MATERIAL DE RUNTIME (nunca versionar) ----
+# Chave privada extraída do binário do cliente (RSA2 @0x1449209a0).
+# Existe AQUI por conveniência de backup, mas o git nunca deve incluí-la.
+keys/
+*.pem
+
+# Corpos de request salvos pelo mock com material de sessão
+unwrap/
+
+# ---- RUNTIME / LOGS ----
+capture_log.jsonl
+server_stdout.txt
+server_stderr.txt
+server_log*.jsonl
+*_out.txt
+*_done.txt
+hot_*.bin
+key_candidates.json
+hunt_candidates.json
+dump_text.bin
+dump_extents.bin
+dump_extents.json
+
+# ---- PYTHON ----
+__pycache__/
+*.pyc
+.venv/
+venv/
